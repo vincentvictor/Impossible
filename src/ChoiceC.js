@@ -1,4 +1,4 @@
-var AnswerC = cc.Sprite.extend({
+var ChoiceC = cc.Sprite.extend({
 	ctor: function(){
 		this._super();
 		this.initWithFile('images/answerC.png');

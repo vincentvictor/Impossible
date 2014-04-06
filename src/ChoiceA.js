@@ -1,4 +1,4 @@
-var AnswerA = cc.Sprite.extend({
+var ChoiceA = cc.Sprite.extend({
     ctor: function() {
         this._super();
         this.initWithFile('images/answerA.png');
@@ -9,9 +9,9 @@ var AnswerA = cc.Sprite.extend({
     changePic: function(){
       this.setTexture(cc.TextureCache.getInstance().addImage('images/answerACircle.png'));
     },
-    correct: function(){
+    // correct: function(){
 
-    }
+    // }
 
 
 

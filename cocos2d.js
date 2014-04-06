@@ -13,10 +13,10 @@
         //SingleEngineFile:'',
         appFiles:[
             'src/GameLayer.js',     //add your own files in order here
-            'src/AnswerA.js' ,
-            'src/AnswerB.js' ,
-            'src/AnswerC.js' ,
-            'src/AnswerD.js' ,
+            'src/ChoiceA.js' ,
+            'src/ChoiceB.js' ,
+            'src/ChoiceC.js' ,
+            'src/ChoiceD.js' ,
             'src/Question0.js' ,
             'src/Background.js' , 
             'src/Grade.js'
