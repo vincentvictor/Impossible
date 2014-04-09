@@ -5,7 +5,8 @@ var GameLayer = cc.LayerColor.extend({
 
         //this.currentStage = 0;
         //this.startState("background");
-        var currentStage = 0;
+        var currentStage;
+        this.currentStage = 0;
         this.startState( currentStage );         
 
         this.setMouseEnabled( true );        
@@ -18,13 +19,18 @@ var GameLayer = cc.LayerColor.extend({
     // },
 
     startState: function( state ) {
-        this.backgroundd = new Background( state );
-        this.backgroundd.setPosition( new cc.Point( 400, 300 ) );
-        this.addChild( this.backgroundd ); 
+        this.bgQuestion = new BGQuestion( state );
+        this.bgQuestion.setPosition( new cc.Point( 400, 300 ) );
+        this.addChild( this.bgQuestion ); 
 
-        this.gradePic = new Grade();
-        this.gradePic.setPosition( new cc.Point( 620 , 546 ));
-        this.addChild( this.gradePic );
+        //combine with bg
+        // this.gradePic = new Grade();
+        // this.gradePic.setPosition( new cc.Point( 620 , 546 ));
+        // this.addChild( this.gradePic );
+
+        this.grade = new Grade();
+        this.grade.setPosition( new cc.Point( 620 , 537 ));
+        this.addChild( this.grade );
 
         this.choiceA = new ChoiceA();
         this.choiceA.setPosition( new cc.Point( 170, 238 ) );
@@ -42,40 +48,39 @@ var GameLayer = cc.LayerColor.extend({
         this.choiceD.setPosition( new cc.Point( 500, 103 ) );
         this.addChild( this.choiceD );
 
-        this.question0 = new Question0();
-        this.question0.setPosition( new cc.Point( 450, 388 ) );
-        this.addChild( this.question0 ); 
-
-    },
-
-    checkRightAnswer: function ( e ){
-
+        this.next = new Next();
+        this.next.setPosition( new cc.Point( 250 , 550 ));
+        this.addChild( this.next );
     },
 
     onMouseDown: function( e ){
-        var answers = [0,1,2,3]; // answer of question 1-4
         var button = this.getClickedButton(e);
         if( button === 0 ){
             this.choiceA.changePic();
-            if(button === answers[0]){
-                console.log("Right");
-            }
-            else {
-                console.log("wrong");
-            }
+            this.checkRightAnswer( button );
             console.log("CLICK ANSWER A");
         } else if( button === 1 ){
             this.choiceB.changePic();
+            this.checkRightAnswer( button );
             console.log("CLICK ANSWER B");
         } else if( button === 2 ){
             this.choiceC.changePic();
+            this.checkRightAnswer( button );
             console.log("CLICK ANSWER C");
         } else if( button === 3 ){
             this.choiceD.changePic();
+            this.checkRightAnswer( button );
             console.log("CLICK ANSWER D");
-        } else {
+        } 
+        else if( button === 10){
+            console.log("nextnext");
+            this.bgQuestion.changePic( this.currentStage );
+        }
+        else {
             console.log("SOMEWHERE");
         }
+
+        
     },
 
     getClickedButton: function( e ){
@@ -88,7 +93,42 @@ var GameLayer = cc.LayerColor.extend({
                 return i;
             }
         }
-    }   
+
+        var nextButton = this.next;
+        var boxx = this.next.getBoundingBox();
+        if(cc.rectContainsPoint(boxx, point)){
+            return 10;
+        }
+
+    },
+    // getClickNext: function( e ){ // skip
+    //     var point = e.getLocation();
+    //     var box = this.next.getBoundingBox();
+    //     if(cc.rectContainsPoint(box, point)){
+    //         return 100;
+    //     }
+    // },
+
+    checkRightAnswer: function ( button ){
+        var answers = [0,1,2,3]; // answer of question 1-4
+            
+        if(button === answers[this.currentStage]){
+            this.currentStage++;
+            console.log(this.currentStage);
+            console.log("Right");
+        }
+        else {
+            this.currentStage++;
+            this.grade.changePic( this.currentStage );
+            console.log("Wrong");
+        }
+        
+    },
+
+    // clearChoice: function(){
+    //     choiceA.setTexture(cc.TextureCache.getInstance().addImage('images/answerA.png'));
+    // }
+
 
 });
 

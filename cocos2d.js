@@ -17,9 +17,9 @@
             'src/ChoiceB.js' ,
             'src/ChoiceC.js' ,
             'src/ChoiceD.js' ,
-            'src/Question0.js' ,
-            'src/Background.js' , 
-            'src/Grade.js'
+            'src/BGQuestion.js' , 
+            'src/Grade.js' ,
+            'src/Next.js'
         ]
     };
 
