@@ -9,7 +9,13 @@ var GameLayer = cc.LayerColor.extend({
 
         // F D  C  B  A
         var gradeScore;
-        this.gradeScore = 0;     
+        this.gradeScore = 0;   
+
+        var clickedSkip;
+        this.clickedSkip = new Array();
+        for(var i=0 ; i<5 ; i++){
+            this.clickedSkip[i] = false;
+        }    
 
         this.scheduleUpdate();
         this.setMouseEnabled( true );        
@@ -58,7 +64,41 @@ var GameLayer = cc.LayerColor.extend({
 
     onMouseDown: function( e ){
         var position = e.getLocation();
-        var button = this.getClickedButton( position );
+        var indexOfChoice = this.getIndexChoiceButton( position );
+        this.handlerChoiceButton( indexOfChoice );
+
+        var indexOfSkip = this.getIndexSkipButton( position );
+        this.handlerSkipButton( indexOfSkip );
+        
+    },
+
+
+    onMouseMoved: function( e ){
+        var position = e.getLocation();
+        this.choiceA.mouseMoved( position );
+        this.choiceB.mouseMoved( position );
+        this.choiceC.mouseMoved( position );
+        this.choiceD.mouseMoved( position );
+
+        
+        for (var i = 0; i < 5; i++){
+            if(this.clickedSkip[i]==false){
+                this.skips[i].mouseMoved( position , i);
+            }
+        }
+    },
+
+    getIndexChoiceButton: function( position ){
+        var choices = [this.choiceA, this.choiceB, this.choiceC, this.choiceD];
+        for(var i = 0; i < choices.length ; i++ ){
+            var box = choices[i].getBoundingBox();
+            if(cc.rectContainsPoint( box , position )){
+                return i;
+            }
+        }
+    },
+
+    handlerChoiceButton: function( button ){
         if( button === 0 ){
             this.choiceA.changePic();
             this.checkRightAnswer( button );
@@ -81,29 +121,25 @@ var GameLayer = cc.LayerColor.extend({
         }
     },
 
-
-    onMouseMoved: function( e ){
-        var position = e.getLocation();
-        this.choiceA.mouseMoved( position );
-        this.choiceB.mouseMoved( position );
-        this.choiceC.mouseMoved( position );
-        this.choiceD.mouseMoved( position );
-
-        for (var i = 0; i < 5; i++)
-            this.skips[i].mouseMoved( position , i);
-        
-    },
-
-    getClickedButton: function( position ){
-        var choices = [this.choiceA, this.choiceB, this.choiceC, this.choiceD];
-       // var point = e.getLocation();
-
-        for(var i = 0; i < choices.length; i++){
-            var box = choices[i].getBoundingBox();
+    getIndexSkipButton: function( position ){
+        var skipButton = [this.skips[0], this.skips[1], this.skips[2], this.skips[3], this.skips[4]];
+        for(var i = 0 ; i < skipButton.length ; i++){
+            var box = skipButton[i].getBoundingBox();
             if(cc.rectContainsPoint( box , position )){
                 return i;
             }
         }
+        return -1;
+    },
+
+    handlerSkipButton: function( indexOfSkip ){
+        if(this.clickedSkip[indexOfSkip]==false){
+            this.currentStage++;
+            this.bgQuestion.changePic( this.currentStage );
+            console.log("currentStage = " + this.currentStage);
+            this.skips[indexOfSkip].setTexture(cc.TextureCache.getInstance().addImage('images/skipNotAllowed.png'));   
+        } 
+        this.clickedSkip[indexOfSkip] = true;    
     },
    
     checkRightAnswer: function ( button ){
@@ -120,6 +156,7 @@ var GameLayer = cc.LayerColor.extend({
             this.gradeScore++;
             this.bgQuestion.changePic( this.currentStage );
             this.grade.changePic( this.gradeScore );
+            console.log( "This current stage = " + this.currentStage );
             console.log( "Wrong" );
         }
         

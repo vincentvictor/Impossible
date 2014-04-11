@@ -4,8 +4,11 @@ var Grade = cc.Sprite.extend({
         this.initWithFile( 'images/grade0.png' );
     },
 
-    changePic: function( currentStage ) {
-    	this.setTexture(cc.TextureCache.getInstance().addImage('images/grade'+currentStage+'.png'));
+    changePic: function( gradeScore ) {
+    	if(gradeScore>4) { console.log(" GAME OVER "); }
+    	else {
+    		this.setTexture(cc.TextureCache.getInstance().addImage('images/grade'+gradeScore+'.png'));
+   		}
     }
 
 });
