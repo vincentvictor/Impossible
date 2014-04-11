@@ -9,12 +9,15 @@ var ChoiceA = cc.Sprite.extend({
     changePic: function(){
       this.setTexture(cc.TextureCache.getInstance().addImage('images/answerACircle.png'));
     },
-    // correct: function(){
-
-    // }
-
-
-
+    
+    mouseMoved: function( position ){
+      var box = this.getBoundingBox();
+      if(cc.rectContainsPoint(box, position )){
+            this.setTexture(cc.TextureCache.getInstance().addImage('images/answerACircle.png'));
+        } else {
+            this.setTexture(cc.TextureCache.getInstance().addImage('images/answerA.png'));
+        }
+    }
 });
 
 

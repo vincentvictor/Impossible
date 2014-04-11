@@ -7,5 +7,14 @@ var ChoiceB = cc.Sprite.extend({
 
     changePic: function(){
       this.setTexture(cc.TextureCache.getInstance().addImage('images/answerBCircle.png'));
+    },
+
+    mouseMoved: function( position ){
+      var box = this.getBoundingBox();
+      if(cc.rectContainsPoint(box, position )){
+            this.setTexture(cc.TextureCache.getInstance().addImage('images/answerBCircle.png'));
+        } else {
+            this.setTexture(cc.TextureCache.getInstance().addImage('images/answerB.png'));
+        }
     }
 });

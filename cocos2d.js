@@ -19,7 +19,8 @@
             'src/ChoiceD.js' ,
             'src/BGQuestion.js' , 
             'src/Grade.js' ,
-            'src/Next.js'
+            'src/Skip.js'
+            
         ]
     };
 

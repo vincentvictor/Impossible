@@ -3,12 +3,15 @@ var GameLayer = cc.LayerColor.extend({
         this._super( new cc.Color4B( 127, 127, 127, 255 ) );
         this.setPosition( new cc.Point( 0, 0 ) );
 
-        //this.currentStage = 0;
-        //this.startState("background");
         var currentStage;
         this.currentStage = 0;
-        this.startState( currentStage );         
+        this.startState( currentStage );  
 
+        // F D  C  B  A
+        var gradeScore;
+        this.gradeScore = 0;     
+
+        this.scheduleUpdate();
         this.setMouseEnabled( true );        
         return true;
     },
@@ -20,13 +23,26 @@ var GameLayer = cc.LayerColor.extend({
 
     startState: function( state ) {
         this.bgQuestion = new BGQuestion( state );
-        this.bgQuestion.setPosition( new cc.Point( 400, 300 ) );
+        this.bgQuestion.setPosition( new cc.Point( 400 , 300 ));
         this.addChild( this.bgQuestion ); 
 
-        //combine with bg
-        // this.gradePic = new Grade();
-        // this.gradePic.setPosition( new cc.Point( 620 , 546 ));
-        // this.addChild( this.gradePic );
+        this.skips = new Array();
+        this.skips[0] = new Skip( 0 );
+        this.skips[1] = new Skip( 1 );
+        this.skips[2] = new Skip( 2 );
+        this.skips[3] = new Skip( 3 );
+        this.skips[4] = new Skip( 4 );
+
+        this.skips[0].setPosition(new cc.Point( 200 , 550 ));
+        this.addChild( this.skips[0] );
+        this.skips[1].setPosition(new cc.Point( 250 , 550 ));
+        this.addChild( this.skips[1] );
+        this.skips[2].setPosition(new cc.Point( 300 , 550 ));
+        this.addChild( this.skips[2] );
+        this.skips[3].setPosition(new cc.Point( 350 , 550 ));
+        this.addChild( this.skips[3] );
+        this.skips[4].setPosition(new cc.Point( 400 , 550 ));
+        this.addChild( this.skips[4] );
 
         this.grade = new Grade();
         this.grade.setPosition( new cc.Point( 620 , 537 ));
@@ -48,86 +64,79 @@ var GameLayer = cc.LayerColor.extend({
         this.choiceD.setPosition( new cc.Point( 500, 103 ) );
         this.addChild( this.choiceD );
 
-        this.next = new Next();
-        this.next.setPosition( new cc.Point( 250 , 550 ));
-        this.addChild( this.next );
+        
     },
 
     onMouseDown: function( e ){
-        var button = this.getClickedButton(e);
+        var position = e.getLocation();
+        var button = this.getClickedButton( position );
         if( button === 0 ){
             this.choiceA.changePic();
             this.checkRightAnswer( button );
-            console.log("CLICK ANSWER A");
+            console.log( "CLICK ANSWER A" );
         } else if( button === 1 ){
             this.choiceB.changePic();
             this.checkRightAnswer( button );
-            console.log("CLICK ANSWER B");
+            console.log( "CLICK ANSWER B" );
         } else if( button === 2 ){
             this.choiceC.changePic();
             this.checkRightAnswer( button );
-            console.log("CLICK ANSWER C");
+            console.log( "CLICK ANSWER C" );
         } else if( button === 3 ){
             this.choiceD.changePic();
             this.checkRightAnswer( button );
-            console.log("CLICK ANSWER D");
+            console.log( "CLICK ANSWER D" );
         } 
-        else if( button === 10){
-            console.log("nextnext");
-            this.bgQuestion.changePic( this.currentStage );
-        }
         else {
-            console.log("SOMEWHERE");
+            console.log( "SOMEWHERE" );
         }
+    },
 
+
+    onMouseMoved: function( e ){
+        var position = e.getLocation();
+        this.choiceA.mouseMoved( position );
+        this.choiceB.mouseMoved( position );
+        this.choiceC.mouseMoved( position );
+        this.choiceD.mouseMoved( position );
+        this.skips[0].mouseMoved( position , 0);
+        this.skips[1].mouseMoved( position , 1);
+        this.skips[2].mouseMoved( position , 2);
+        this.skips[3].mouseMoved( position ,3 );
+        this.skips[4].mouseMoved( position ,4);
         
     },
 
-    getClickedButton: function( e ){
+    getClickedButton: function( position ){
         var choices = [this.choiceA, this.choiceB, this.choiceC, this.choiceD];
-        var point = e.getLocation();
+       // var point = e.getLocation();
 
         for(var i = 0; i < choices.length; i++){
             var box = choices[i].getBoundingBox();
-            if(cc.rectContainsPoint(box, point)){
+            if(cc.rectContainsPoint( box , position )){
                 return i;
             }
         }
-
-        var nextButton = this.next;
-        var boxx = this.next.getBoundingBox();
-        if(cc.rectContainsPoint(boxx, point)){
-            return 10;
-        }
-
     },
-    // getClickNext: function( e ){ // skip
-    //     var point = e.getLocation();
-    //     var box = this.next.getBoundingBox();
-    //     if(cc.rectContainsPoint(box, point)){
-    //         return 100;
-    //     }
-    // },
-
+   
     checkRightAnswer: function ( button ){
-        var answers = [0,1,2,3]; // answer of question 1-4
+        var answers = [0,1,2,3,0,1,2,3,0,1]; // answer of question 1-10
             
         if(button === answers[this.currentStage]){
             this.currentStage++;
-            console.log(this.currentStage);
-            console.log("Right");
+            this.bgQuestion.changePic( this.currentStage );
+            console.log( "This current stage = " + this.currentStage );
+            console.log( "Right" );
         }
         else {
             this.currentStage++;
-            this.grade.changePic( this.currentStage );
-            console.log("Wrong");
+            this.gradeScore++;
+            this.bgQuestion.changePic( this.currentStage );
+            this.grade.changePic( this.gradeScore );
+            console.log( "Wrong" );
         }
         
     },
-
-    // clearChoice: function(){
-    //     choiceA.setTexture(cc.TextureCache.getInstance().addImage('images/answerA.png'));
-    // }
 
 
 });
