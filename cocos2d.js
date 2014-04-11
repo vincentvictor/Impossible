@@ -14,9 +14,6 @@
         appFiles:[
             'src/GameLayer.js',     //add your own files in order here
             'src/Choice.js' ,
-            'src/ChoiceB.js' ,
-            'src/ChoiceC.js' ,
-            'src/ChoiceD.js' ,
             'src/BGQuestion.js' , 
             'src/Grade.js' ,
             'src/Skip.js'
