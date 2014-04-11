@@ -16,7 +16,7 @@
             'src/Choice.js' ,
             'src/BGQuestion.js' , 
             'src/Grade.js' ,
-            'src/Skip.js'
+            'src/Skip.js' ,
             
         ]
     };

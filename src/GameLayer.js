@@ -7,7 +7,6 @@ var GameLayer = cc.LayerColor.extend({
         this.currentStage = 0;
         this.startState( currentStage );  
 
-        // F D  C  B  A
         var gradeScore;
         this.gradeScore = 0;   
 
@@ -18,17 +17,13 @@ var GameLayer = cc.LayerColor.extend({
         }    
 
         this.scheduleUpdate();
-        this.setMouseEnabled( true );        
+        this.setMouseEnabled( true );    
         return true;
     },
 
-    // toNextStage: function() {   
-    //     this.currentState++;
-    //     this.startState( this.currentState );
-    // },
 
-    startState: function( state ) {
-        this.bgQuestion = new BGQuestion( state );
+    startState: function( currentStage ) {
+        this.bgQuestion = new BGQuestion( currentStage );
         this.bgQuestion.setPosition( new cc.Point( 400 , 300 ));
         this.addChild( this.bgQuestion ); 
 
@@ -58,9 +53,20 @@ var GameLayer = cc.LayerColor.extend({
         this.choiceD = new Choice("D");
         this.choiceD.setPosition( new cc.Point( 500, 103 ) );
         this.addChild( this.choiceD );
-
         
     },
+
+    update: function(){
+        if(this.currentStage==9) {
+            this.currentStage = 0;
+            this.gradeScore = 0;
+            for(var i=0 ; i<5 ; i++){
+                this.clickedSkip[i] = false;
+            } 
+            this.startState( this.currentStage );
+        }
+    },
+
 
     onMouseDown: function( e ){
         var position = e.getLocation();
@@ -72,14 +78,12 @@ var GameLayer = cc.LayerColor.extend({
         
     },
 
-
     onMouseMoved: function( e ){
         var position = e.getLocation();
         this.choiceA.mouseMoved( position );
         this.choiceB.mouseMoved( position );
         this.choiceC.mouseMoved( position );
         this.choiceD.mouseMoved( position );
-
         
         for (var i = 0; i < 5; i++){
             if(this.clickedSkip[i]==false){
@@ -98,29 +102,6 @@ var GameLayer = cc.LayerColor.extend({
         }
     },
 
-    handlerChoiceButton: function( button ){
-        if( button === 0 ){
-            this.choiceA.changePic();
-            this.checkRightAnswer( button );
-            console.log( "CLICK ANSWER A" );
-        } else if( button === 1 ){
-            this.choiceB.changePic();
-            this.checkRightAnswer( button );
-            console.log( "CLICK ANSWER B" );
-        } else if( button === 2 ){
-            this.choiceC.changePic();
-            this.checkRightAnswer( button );
-            console.log( "CLICK ANSWER C" );
-        } else if( button === 3 ){
-            this.choiceD.changePic();
-            this.checkRightAnswer( button );
-            console.log( "CLICK ANSWER D" );
-        } 
-        else {
-            console.log( "SOMEWHERE" );
-        }
-    },
-
     getIndexSkipButton: function( position ){
         var skipButton = [this.skips[0], this.skips[1], this.skips[2], this.skips[3], this.skips[4]];
         for(var i = 0 ; i < skipButton.length ; i++){
@@ -131,6 +112,35 @@ var GameLayer = cc.LayerColor.extend({
         }
         return -1;
     },
+
+    handlerChoiceButton: function( button ){
+        if( button === 0 ){
+            this.choiceA.changePic();
+            this.clickChoiceSound();
+            this.checkRightAnswer( button );
+            console.log( "CLICK ANSWER A" );
+        } else if( button === 1 ){
+            this.choiceB.changePic();
+            this.clickChoiceSound();
+            this.checkRightAnswer( button );
+            console.log( "CLICK ANSWER B" );
+        } else if( button === 2 ){
+            this.choiceC.changePic();
+            this.clickChoiceSound();
+            this.checkRightAnswer( button );
+            console.log( "CLICK ANSWER C" );
+        } else if( button === 3 ){
+            this.choiceD.changePic();
+            this.clickChoiceSound();
+            this.checkRightAnswer( button );
+            console.log( "CLICK ANSWER D" );
+        } 
+        else {
+            console.log( "SOMEWHERE" );
+        }
+    },
+
+   
 
     handlerSkipButton: function( indexOfSkip ){
         if(this.clickedSkip[indexOfSkip]==false){
@@ -160,6 +170,10 @@ var GameLayer = cc.LayerColor.extend({
             console.log( "Wrong" );
         }
         
+    },
+
+    clickChoiceSound: function(){
+        cc.AudioEngine.getInstance().playEffect('Sound/Pikachu.mp3');
     },
 
 
