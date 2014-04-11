@@ -27,40 +27,29 @@ var GameLayer = cc.LayerColor.extend({
         this.addChild( this.bgQuestion ); 
 
         this.skips = new Array();
-        this.skips[0] = new Skip( 0 );
-        this.skips[1] = new Skip( 1 );
-        this.skips[2] = new Skip( 2 );
-        this.skips[3] = new Skip( 3 );
-        this.skips[4] = new Skip( 4 );
-
-        this.skips[0].setPosition(new cc.Point( 200 , 550 ));
-        this.addChild( this.skips[0] );
-        this.skips[1].setPosition(new cc.Point( 250 , 550 ));
-        this.addChild( this.skips[1] );
-        this.skips[2].setPosition(new cc.Point( 300 , 550 ));
-        this.addChild( this.skips[2] );
-        this.skips[3].setPosition(new cc.Point( 350 , 550 ));
-        this.addChild( this.skips[3] );
-        this.skips[4].setPosition(new cc.Point( 400 , 550 ));
-        this.addChild( this.skips[4] );
+        for(var i=0 ; i<5 ; i++){
+            this.skips[i] = new Skip( i );
+            this.skips[i].setPosition(new cc.Point( 200 + (50 * i) , 550));
+            this.addChild( this.skips[i] );
+        }
 
         this.grade = new Grade();
         this.grade.setPosition( new cc.Point( 620 , 537 ));
         this.addChild( this.grade );
 
-        this.choiceA = new ChoiceA();
+        this.choiceA = new Choice("A");
         this.choiceA.setPosition( new cc.Point( 170, 238 ) );
         this.addChild( this.choiceA );
 
-        this.choiceB = new ChoiceB();
+        this.choiceB = new Choice("B");
         this.choiceB.setPosition( new cc.Point( 500, 237 ) );
         this.addChild( this.choiceB );
 
-        this.choiceC = new ChoiceC();
+        this.choiceC = new Choice("C");
         this.choiceC.setPosition( new cc.Point( 170, 103 ) );
         this.addChild( this.choiceC );
 
-        this.choiceD = new ChoiceD();
+        this.choiceD = new Choice("D");
         this.choiceD.setPosition( new cc.Point( 500, 103 ) );
         this.addChild( this.choiceD );
 
@@ -99,11 +88,9 @@ var GameLayer = cc.LayerColor.extend({
         this.choiceB.mouseMoved( position );
         this.choiceC.mouseMoved( position );
         this.choiceD.mouseMoved( position );
-        this.skips[0].mouseMoved( position , 0);
-        this.skips[1].mouseMoved( position , 1);
-        this.skips[2].mouseMoved( position , 2);
-        this.skips[3].mouseMoved( position ,3 );
-        this.skips[4].mouseMoved( position ,4);
+
+        for (var i = 0; i < 5; i++)
+            this.skips[i].mouseMoved( position , i);
         
     },
 

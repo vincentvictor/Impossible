@@ -13,7 +13,7 @@
         //SingleEngineFile:'',
         appFiles:[
             'src/GameLayer.js',     //add your own files in order here
-            'src/ChoiceA.js' ,
+            'src/Choice.js' ,
             'src/ChoiceB.js' ,
             'src/ChoiceC.js' ,
             'src/ChoiceD.js' ,
