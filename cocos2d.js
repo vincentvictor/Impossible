@@ -17,6 +17,7 @@
             'src/BGQuestion.js' , 
             'src/Grade.js' ,
             'src/Skip.js' ,
+            'src/GameOver.js'
             
         ]
     };

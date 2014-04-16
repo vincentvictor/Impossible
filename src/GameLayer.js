@@ -14,13 +14,26 @@ var GameLayer = cc.LayerColor.extend({
         this.clickedSkip = new Array();
         for(var i=0 ; i<5 ; i++){
             this.clickedSkip[i] = false;
-        }    
+        }   
 
+       
         this.scheduleUpdate();
-        this.setMouseEnabled( true );    
+        this.setMouseEnabled( true ); 
+
+        this.schedule(this.countDown,2);  
+        this.z = 50;
+
         return true;
     },
 
+    countDown: function  () {
+        
+        this.gameOver = new GameOver();
+        this.gameOver.setPosition( new cc.Point( 400 + this.z , 300 ));
+        this.addChild( this.gameOver ); 
+        this.z = this.z+50;
+     
+    },
 
     startState: function( currentStage ) {
         this.bgQuestion = new BGQuestion( currentStage );
@@ -65,6 +78,8 @@ var GameLayer = cc.LayerColor.extend({
             } 
             this.startState( this.currentStage );
         }
+
+       
     },
 
 
@@ -173,6 +188,13 @@ var GameLayer = cc.LayerColor.extend({
     clickChoiceSound: function(){
         cc.AudioEngine.getInstance().playEffect('Sound/Pikachu.mp3');
     },
+
+    transition: function(){
+
+        var scene = GameOver.scene();
+        var gameTransition = cc.TransitionFade.create(1, scene);
+        cc.Director.getInstance().replaceScene(gameTransition);
+    }
 
 
 });
