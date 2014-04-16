@@ -7,31 +7,32 @@ var GameLayer = cc.LayerColor.extend({
         this.currentStage = 0;
         this.startState( currentStage );  
 
+        // A=0 , B=1 , C=2 , D=3 , F=4
         var gradeScore;
         this.gradeScore = 0;   
 
+        // skip button that was clicked
         var clickedSkip;
         this.clickedSkip = new Array();
         for(var i=0 ; i<5 ; i++){
             this.clickedSkip[i] = false;
         }   
 
+   
        
         this.scheduleUpdate();
         this.setMouseEnabled( true ); 
-
-        this.schedule(this.countDown,2);  
-        this.z = 50;
 
         return true;
     },
 
     countDown: function  () {
-        
-        this.gameOver = new GameOver();
-        this.gameOver.setPosition( new cc.Point( 400 + this.z , 300 ));
-        this.addChild( this.gameOver ); 
-        this.z = this.z+50;
+        this.currentStage = 0;
+        this.gradeScore = 0;
+        for(var i=0 ; i<5 ; i++){
+            this.clickedSkip[i] = false;
+        } 
+        this.startState( this.currentStage );
      
     },
 
@@ -69,8 +70,10 @@ var GameLayer = cc.LayerColor.extend({
         
     },
 
+   
+
     update: function(){
-        if(this.currentStage==9) {
+        if( this.currentStage==9 ) {
             this.currentStage = 0;
             this.gradeScore = 0;
             for(var i=0 ; i<5 ; i++){
@@ -78,8 +81,6 @@ var GameLayer = cc.LayerColor.extend({
             } 
             this.startState( this.currentStage );
         }
-
-       
     },
 
 
@@ -173,28 +174,36 @@ var GameLayer = cc.LayerColor.extend({
             this.bgQuestion.changePic( this.currentStage );
             console.log( "This current stage = " + this.currentStage );
             console.log( "Right" );
+
         }
         else {
             this.currentStage++;
             this.gradeScore++;
             this.bgQuestion.changePic( this.currentStage );
             this.grade.changePic( this.gradeScore );
+
             console.log( "This current stage = " + this.currentStage );
+            console.log( "This Grade Score = " + this.gradeScore);
             console.log( "Wrong" );
         }
+
+        if(this.currentStage>0){
+            this.unschedule(this.countDown);
+        }
+        this.schedule(this.countDown,3);
         
     },
+
 
     clickChoiceSound: function(){
         cc.AudioEngine.getInstance().playEffect('Sound/Pikachu.mp3');
     },
 
-    transition: function(){
-
-        var scene = GameOver.scene();
-        var gameTransition = cc.TransitionFade.create(1, scene);
-        cc.Director.getInstance().replaceScene(gameTransition);
-    }
+    // transition: function(){
+    //     var scene = GameOver.scene();
+    //     var gameTransition = cc.TransitionFade.create(1, scene);
+    //     cc.Director.getInstance().replaceScene(gameTransition);
+    // }
 
 
 });
