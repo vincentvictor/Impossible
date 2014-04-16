@@ -30,7 +30,7 @@ var GameLayer = cc.LayerColor.extend({
         this.skips = new Array();
         for(var i=0 ; i<5 ; i++){
             this.skips[i] = new Skip( i );
-            this.skips[i].setPosition(new cc.Point( 200 + (50 * i) , 550));
+            this.skips[i].setPosition(new cc.Point( 170 + (60 * i) , 530));
             this.addChild( this.skips[i] );
         }
 
@@ -39,19 +39,19 @@ var GameLayer = cc.LayerColor.extend({
         this.addChild( this.grade );
 
         this.choiceA = new Choice("A");
-        this.choiceA.setPosition( new cc.Point( 170, 238 ) );
+        this.choiceA.setPosition( new cc.Point( 150, 238 ) );
         this.addChild( this.choiceA );
 
         this.choiceB = new Choice("B");
-        this.choiceB.setPosition( new cc.Point( 500, 237 ) );
+        this.choiceB.setPosition( new cc.Point( 480, 237 ) );
         this.addChild( this.choiceB );
 
         this.choiceC = new Choice("C");
-        this.choiceC.setPosition( new cc.Point( 170, 103 ) );
+        this.choiceC.setPosition( new cc.Point( 150, 103 ) );
         this.addChild( this.choiceC );
 
         this.choiceD = new Choice("D");
-        this.choiceD.setPosition( new cc.Point( 500, 103 ) );
+        this.choiceD.setPosition( new cc.Point( 480, 103 ) );
         this.addChild( this.choiceD );
         
     },
@@ -139,8 +139,6 @@ var GameLayer = cc.LayerColor.extend({
             console.log( "SOMEWHERE" );
         }
     },
-
-   
 
     handlerSkipButton: function( indexOfSkip ){
         if(this.clickedSkip[indexOfSkip]==false){
