@@ -1,24 +1,23 @@
 var GameLayer = cc.LayerColor.extend({
     init: function() {
-        this._super( new cc.Color4B( 127, 127, 127, 255 ) );
+        this._super( new cc.Color4B( 255, 255, 255, 255 ) );
         this.setPosition( new cc.Point( 0, 0 ) );
 
         var currentStage;
+        this.isGameOver=false;
         this.currentStage = 0;
         this.startState( currentStage );  
 
-        // A=0 , B=1 , C=2 , D=3 , F=4
+        // A=0, B+=1, B=2, C+=3, C=4 , D=5 ,D+=6, F=7
         var gradeScore;
         this.gradeScore = 0;   
 
         // skip button that was clicked
         var clickedSkip;
         this.clickedSkip = new Array();
-        for(var i=0 ; i<5 ; i++){
+        for( var i=0 ; i<5 ; i++ ){
             this.clickedSkip[i] = false;
         }   
-
-   
        
         this.scheduleUpdate();
         this.setMouseEnabled( true ); 
@@ -26,10 +25,10 @@ var GameLayer = cc.LayerColor.extend({
         return true;
     },
 
-    countDown: function  () {
+    countDown: function  () { 
         this.currentStage = 0;
         this.gradeScore = 0;
-        for(var i=0 ; i<5 ; i++){
+        for( var i=0 ; i<5 ; i++ ){
             this.clickedSkip[i] = false;
         } 
         this.startState( this.currentStage );
@@ -42,9 +41,9 @@ var GameLayer = cc.LayerColor.extend({
         this.addChild( this.bgQuestion ); 
 
         this.skips = new Array();
-        for(var i=0 ; i<5 ; i++){
+        for( var i=0 ; i<5 ; i++ ){
             this.skips[i] = new Skip( i );
-            this.skips[i].setPosition(new cc.Point( 170 + (60 * i) , 530));
+            this.skips[i].setPosition( new cc.Point( 170 + (60 * i) , 530));
             this.addChild( this.skips[i] );
         }
 
@@ -53,7 +52,7 @@ var GameLayer = cc.LayerColor.extend({
         this.addChild( this.grade );
 
         this.choiceA = new Choice("A");
-        this.choiceA.setPosition( new cc.Point( 150, 238 ) );
+        this.choiceA.setPosition( new cc.Point( 146, 238 ) );
         this.addChild( this.choiceA );
 
         this.choiceB = new Choice("B");
@@ -73,46 +72,62 @@ var GameLayer = cc.LayerColor.extend({
    
 
     update: function(){
+        //if( this.currentStage==9 || this.gradeScore==4 ) {
         if( this.currentStage==9 ) {
-            this.currentStage = 0;
-            this.gradeScore = 0;
-            for(var i=0 ; i<5 ; i++){
-                this.clickedSkip[i] = false;
-            } 
-            this.startState( this.currentStage );
+            this.startNewGame();
         }
+    },
+    startNewGame: function() {
+        this.currentStage = 0;
+        this.gradeScore = 0;
+        for( var i=0 ; i<5 ; i++ ){
+            this.clickedSkip[i] = false;
+        } 
+        this.startState( this.currentStage );
     },
 
 
     onMouseDown: function( e ){
         var position = e.getLocation();
-        var indexOfChoice = this.getIndexChoiceButton( position );
-        this.handlerChoiceButton( indexOfChoice );
+        if( !this.isGameOver ) {
+            var indexOfChoice = this.getIndexChoiceButton( position );
+            this.handlerChoiceButton( indexOfChoice );
 
-        var indexOfSkip = this.getIndexSkipButton( position );
-        this.handlerSkipButton( indexOfSkip );
-        
+            var indexOfSkip = this.getIndexSkipButton( position );
+            this.handlerSkipButton( indexOfSkip );
+        }
+        else {
+            // try again
+            // menu
+            //ไม่เกี่วกับการเล่นเกม
+        }
     },
 
     onMouseMoved: function( e ){
         var position = e.getLocation();
-        this.choiceA.mouseMoved( position );
-        this.choiceB.mouseMoved( position );
-        this.choiceC.mouseMoved( position );
-        this.choiceD.mouseMoved( position );
+
+        if( !this.isGameOver ) {
+            this.choiceA.mouseMoved( position );
+            this.choiceB.mouseMoved( position );
+            this.choiceC.mouseMoved( position );
+            this.choiceD.mouseMoved( position );
         
-        for (var i = 0; i < 5; i++){
-            if(this.clickedSkip[i]==false){
-                this.skips[i].mouseMoved( position , i);
+            for ( var i = 0; i < 5; i++ ){
+                if( this.clickedSkip[i]==false ){
+                    this.skips[i].mouseMoved( position , i);
+                }
             }
+        }
+        else {
+
         }
     },
 
     getIndexChoiceButton: function( position ){
         var choices = [this.choiceA, this.choiceB, this.choiceC, this.choiceD];
-        for(var i = 0; i < choices.length ; i++ ){
+        for( var i = 0; i < choices.length ; i++ ){
             var box = choices[i].getBoundingBox();
-            if(cc.rectContainsPoint( box , position )){
+            if( cc.rectContainsPoint( box , position ) ){
                 return i;
             }
         }
@@ -120,9 +135,9 @@ var GameLayer = cc.LayerColor.extend({
 
     getIndexSkipButton: function( position ){
         var skipButton = [this.skips[0], this.skips[1], this.skips[2], this.skips[3], this.skips[4]];
-        for(var i = 0 ; i < skipButton.length ; i++){
+        for( var i=0 ; i<skipButton.length ; i++ ){
             var box = skipButton[i].getBoundingBox();
-            if(cc.rectContainsPoint( box , position )){
+            if( cc.rectContainsPoint( box , position ) ){
                 return i;
             }
         }
@@ -132,22 +147,22 @@ var GameLayer = cc.LayerColor.extend({
     handlerChoiceButton: function( button ){
         if( button === 0 ){
             this.choiceA.changePic();
-            this.clickChoiceSound();
+           // this.clickChoiceSound();
             this.checkRightAnswer( button );
             console.log( "CLICK ANSWER A" );
         } else if( button === 1 ){
             this.choiceB.changePic();
-            this.clickChoiceSound();
+           // this.clickChoiceSound();
             this.checkRightAnswer( button );
             console.log( "CLICK ANSWER B" );
         } else if( button === 2 ){
             this.choiceC.changePic();
-            this.clickChoiceSound();
+           // this.clickChoiceSound();
             this.checkRightAnswer( button );
             console.log( "CLICK ANSWER C" );
         } else if( button === 3 ){
             this.choiceD.changePic();
-            this.clickChoiceSound();
+           // this.clickChoiceSound();
             this.checkRightAnswer( button );
             console.log( "CLICK ANSWER D" );
         } 
@@ -157,7 +172,7 @@ var GameLayer = cc.LayerColor.extend({
     },
 
     handlerSkipButton: function( indexOfSkip ){
-        if(this.clickedSkip[indexOfSkip]==false){
+        if( this.clickedSkip[indexOfSkip]==false ){
             this.currentStage++;
             this.bgQuestion.changePic( this.currentStage );
             console.log("currentStage = " + this.currentStage);
@@ -169,34 +184,79 @@ var GameLayer = cc.LayerColor.extend({
     checkRightAnswer: function ( button ){
         var answers = [0,1,2,3,0,1,2,3,0,1]; // answer of question 1-10
             
-        if(button === answers[this.currentStage]){
+        if( button === answers[this.currentStage] ){
+            this.clickRightChoiceSound();
             this.currentStage++;
             this.bgQuestion.changePic( this.currentStage );
             console.log( "This current stage = " + this.currentStage );
             console.log( "Right" );
-
         }
         else {
-            this.currentStage++;
+           // var scene = GameOverScene;
+           //  var gameTransition = cc.TransitionFade.create(1, scene);
+           //  cc.Director.getInstance().replaceScene(gameTransition);
+
+            this.clickWrongChoiceSound();
             this.gradeScore++;
-            this.bgQuestion.changePic( this.currentStage );
-            this.grade.changePic( this.gradeScore );
-
-            console.log( "This current stage = " + this.currentStage );
-            console.log( "This Grade Score = " + this.gradeScore);
-            console.log( "Wrong" );
+            if( this.gradeScore<4 ){
+                this.grade.changePic( this.gradeScore );
+            }
+            else
+                this.gameOver();
         }
 
-        if(this.currentStage>0){
-            this.unschedule(this.countDown);
+        // if( this.currentStage>0 ){
+        //     this.unschedule(this.countDown);
+        // }
+        // this.schedule(this.countDown,3);    
+    },
+    gameOver: function() {
+        // for( var i=0;i<this.skips.length;i++ ) {
+        //     this.removeChild( this.skips[i] );
+        // }
+        // this.removeChild( this.choiceA );
+        // this.removeChild( this.choiceB );
+        // this.removeChild( this.choiceC );
+        // this.removeChild( this.choiceD );
+        // this.removeChild( this.grade );
+        // this.schedule( this.updateHideGameOver,0,Infinity,0 );
+        this.isGameOver = true;
+        this.gameOverPic = new GameOver();
+        this.gameOverPic.setOpacity( 0 );
+        this.gameOverPic.setPosition( new cc.Point( 400 , 300 ));
+        this.addChild( this.gameOverPic,100 );
+        this.schedule( this.updateShowGameOver,0,Infinity,0 );
+    },
+    updateShowGameOver: function() {
+        var opacity = this.gameOverPic.getOpacity();
+        this.gameOverPic.setOpacity( opacity+17/4 );
+        if( this.gameOverPic.getOpacity()>=255 ) {
+            this.gameOverPic.setOpacity( 255 );
+            this.unschedule( this.updateShowGameOver );
         }
-        this.schedule(this.countDown,3);
-        
+
+    },
+    restartGame: function() {
+        this.startNewGame();
+        // remove try again button duay
+        this.schedule( this.updateHideGameOver,0,Infinity,0 );
+    },
+    updateHideGameOver: function() {
+        var opacity = this.gameOverPic.getOpacity();
+        this.gameOverPic.setOpacity( opacity-17/2 );
+        if( this.gameOverPic.getOpacity()<=0 ) {
+            this.removeChild( this.gameOverPic );
+            this.unschedule( this.updateHideGameOver );
+        }
     },
 
 
-    clickChoiceSound: function(){
+    clickRightChoiceSound: function(){
         cc.AudioEngine.getInstance().playEffect('Sound/Pikachu.mp3');
+    },
+
+    clickWrongChoiceSound: function(){
+        cc.AudioEngine.getInstance().playEffect('Sound/Crow.mp3');
     },
 
     // transition: function(){
@@ -204,8 +264,6 @@ var GameLayer = cc.LayerColor.extend({
     //     var gameTransition = cc.TransitionFade.create(1, scene);
     //     cc.Director.getInstance().replaceScene(gameTransition);
     // }
-
-
 });
 
 var StartScene = cc.Scene.extend({
@@ -216,5 +274,3 @@ var StartScene = cc.Scene.extend({
         this.addChild( layer );
     }
 });
-
-
