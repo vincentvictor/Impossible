@@ -14,8 +14,10 @@ var GameLayer = cc.LayerColor.extend({
         // skip button that was clicked
         var clickedSkip;
         this.clickedSkip = new Array();
+      ;
         for( var i=0 ; i<5 ; i++ ){
             this.clickedSkip[i] = false;
+            
         }   
 
         this.rainbowPoint = 0;
@@ -135,12 +137,15 @@ var GameLayer = cc.LayerColor.extend({
                     this.addChild(this.choiceD);
                 }
             }
+          
+                var indexOfSkip = this.getIndexSkipButton( position );
+                this.handlerSkipButton( indexOfSkip );
+       
 
             var indexOfChoice = this.getIndexChoiceButton( position );
             this.handlerChoiceButton( indexOfChoice );
 
-            var indexOfSkip = this.getIndexSkipButton( position );
-            this.handlerSkipButton( indexOfSkip );
+            
         }
         else {
             for( var i=0 ; i<1 ; i++){
@@ -229,7 +234,7 @@ var GameLayer = cc.LayerColor.extend({
        
 
         if( this.clickedSkip[indexOfSkip]==false ){
-            this.count = 6;
+            this.count = 11;
             this.schedule( this.countDown ,1 );
             this.currentStage++;
             this.bgQuestion.changePic( this.currentStage );
@@ -241,16 +246,24 @@ var GameLayer = cc.LayerColor.extend({
     },
    
     checkRightAnswer: function ( button ){
-        var answers = [3,1,1,0,2,2,1,3,2,2, 9,2,0,0,1,3,2,9 ]; // answer of question 1-10
+        var answers = [3,1,1,0,2,2,1,3,2,2, 9,2,0,0,1,3,2,9,3,2 ]; // answer of question 1-10
         
         if( button === answers[this.currentStage] ){
             this.clickRightChoiceSound();
             this.currentStage++;
-          
+            
+            if(this.currentStage==20){
+                this.end = new BGQuestion();
+                this.end.setPosition( new cc.Point(400,300));
+                this.end.endGame();
+                this.addChild(this.end);
+                this.unschedule(this.countDown);
+            }else {
             this.bgQuestion.changePic( this.currentStage );
+            }
             
 
-            this.count = 6;
+            this.count = 11;
             this.schedule( this.countDown ,1 );
 
             if(this.currentStage==10){
@@ -268,6 +281,7 @@ var GameLayer = cc.LayerColor.extend({
                 this.addChild(this.special18);
 
             }
+            
         }
         else {
             this.wrong = new Wrong();

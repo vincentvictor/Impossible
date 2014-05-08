@@ -20,5 +20,9 @@ var BGQuestion = cc.Sprite.extend({
     startIntro: function(){
 		this.initWithFile( 'images/intro.png' );
     },
+
+    endGame: function(){
+        this.initWithFile( 'images/end.png' );
+    }
 });
 
