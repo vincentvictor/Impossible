@@ -12,12 +12,19 @@
         engineDir: '../../cocos2d/',
         //SingleEngineFile:'',
         appFiles:[
-            'src/GameLayer.js',     //add your own files in order here
+            'src/GameLayer.js',
+            'src/Intro.js',     //add your own files in order here
             'src/Choice.js' ,
             'src/BGQuestion.js' , 
             'src/Grade.js' ,
             'src/Skip.js' ,
-            'src/GameOver.js'
+            'src/GameOver.js',
+            'src/NyanCat.js',
+            'src/PusheenCat.js',
+            'src/Wrong.js',
+            'src/TryAgain.js',
+            'src/Rainbow.js',
+            'src/SpecialQuestion.js'
             
         ]
     };

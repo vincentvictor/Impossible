@@ -1,32 +1,24 @@
 var Choice = cc.Sprite.extend({
-    ctor: function(choice) {
+    ctor: function() {
         this._super();
-        this.initWithFile('images/answer' + choice + '.png');
+        this.initWithFile('images/answerA.png');
         this.stared = false;
-        this.choice = choice;
+        //this.choice = choice;
 
     },
 
     changePic: function(){
-      this.setTexture(cc.TextureCache.getInstance().addImage('images/answer'+this.choice+'Circle.png'));
+      this.setTexture(cc.TextureCache.getInstance().addImage('images/answerACircle.png'));
     },
     
     mouseMoved: function( position ){
       var box = this.getBoundingBox();
       if(cc.rectContainsPoint(box, position )){
-            this.setTexture(cc.TextureCache.getInstance().addImage('images/answer'+this.choice+'Circle.png'));
+            this.setTexture(cc.TextureCache.getInstance().addImage('images/answerACircle.png'));
         } else {
-            this.setTexture(cc.TextureCache.getInstance().addImage('images/answer'+this.choice+'.png'));
+            this.setTexture(cc.TextureCache.getInstance().addImage('images/answerA.png'));
         }
     }
 });
 
 
-/*function swapImage(id,primary,secondary) {
-    src=document.getElementById(id).src;
-    if (src.match(primary)) {
-      document.getElementById(id).src=secondary;
-    } else {
-      document.getElementById(id).src=primary;
-    }
-  }*/
