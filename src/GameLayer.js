@@ -126,6 +126,7 @@ var GameLayer = cc.LayerColor.extend({
                     this.removeChild(this.special11);
                 }
             }
+
             else if(this.currentStage==17){
                 var box = this.special18.getBoundingBox();
                 if( cc.rectContainsPoint( box , position ) ){
@@ -162,7 +163,9 @@ var GameLayer = cc.LayerColor.extend({
         var position = e.getLocation();
 
         if( !this.isGameOver ) {
-
+            if(this.currentStage==11){
+                this.removeChild(this.special11);
+            }
             this.choiceA.mouseMoved( position );
             this.choiceB.mouseMoved( position );
             this.choiceC.mouseMoved( position );
